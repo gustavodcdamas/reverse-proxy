@@ -3,8 +3,6 @@ services:
     nginx:
         image: nginx:latest
         container_name: nginx
-        depends_on:
-            - gustavodcdamas
         build:
             context: ./
         ports:
