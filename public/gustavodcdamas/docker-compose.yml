@@ -17,10 +17,6 @@ services:
       - wordpress:/var/www/html
       - ./src/tema:/var/www/html/wp-content/themes/meu-plugin
       - ./src/plugin:/var/www/html/wp-content/plugins/meu-plugin
-    networks:
-      - net_local
-      - geral
-      - back 
 
   db:
     image: mysql:8.0
@@ -31,11 +27,7 @@ services:
       MYSQL_PASSWORD: senhapadrao
       MYSQL_RANDOM_ROOT_PASSWORD: '1'
     volumes:
-      - db:/var/lib/mysql
-    networks:
-      - net_local
-      - geral
-      - back 
+      - db:/var/lib/mysql 
 
   adminer:
     depends_on: 
@@ -44,10 +36,6 @@ services:
     restart: always
     ports: 
       - 8888:8080 
-    networks:
-      - net_local
-      - geral
-      - back 
     
 networks:
   back:
