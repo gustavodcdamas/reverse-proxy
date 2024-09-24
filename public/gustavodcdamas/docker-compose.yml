@@ -3,11 +3,11 @@ version: '3.1'
 services:
 
   gustavodcdamas:
-    image: wordpress
     container_name: gustavodcdamas
+    image: wordpress
     restart: always
     ports:
-      - 8081:80
+      - 8081:8081
     environment:
       WORDPRESS_DB_HOST: db
       WORDPRESS_DB_USER: usuariopadrao
