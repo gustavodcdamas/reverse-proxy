@@ -1,0 +1,61 @@
+version: '3.1'
+
+services:
+
+  gustavodcdamas:
+    image: wordpress
+    container_name: gustavodcdamas
+    restart: always
+    ports:
+      - 8081:80
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: usuariopadrao
+      WORDPRESS_DB_PASSWORD: senhapadrao
+      WORDPRESS_DB_NAME: wpdb
+    volumes:
+      - wordpress:/var/www/html
+      - ./src/tema:/var/www/html/wp-content/themes/meu-plugin
+      - ./src/plugin:/var/www/html/wp-content/plugins/meu-plugin
+    networks:
+      - net_local
+      - geral
+      - back 
+
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: wpdb
+      MYSQL_USER: usuariopadrao
+      MYSQL_PASSWORD: senhapadrao
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+    volumes:
+      - db:/var/lib/mysql
+    networks:
+      - net_local
+      - geral
+      - back 
+
+  adminer:
+    depends_on: 
+      - db
+    image: adminer
+    restart: always
+    ports: 
+      - 8888:8080 
+    networks:
+      - net_local
+      - geral
+      - back 
+    
+networks:
+  back:
+  net_local:
+    driver: bridge
+  geral:
+    external: true
+
+volumes:
+  wordpress:
+  db:
