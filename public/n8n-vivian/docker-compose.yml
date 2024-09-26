@@ -3,6 +3,8 @@ version: "3.7"
 services:
   n8n-vivian:
     image: docker.n8n.io/n8nio/n8n
+    build:
+      context: ./
     container_name: n8n-vivian
     restart: always
     ports:
@@ -19,9 +21,10 @@ services:
     volumes:
       - n8n_vivian:/home/node/.n8n
   
-  postgres:
+  postgres_vivian:
     restart: always
     image: postgres:latest
+    container_name: postgres_vivian
     environment:
       - POSTGRES_DB=n8n
       - POSTGRES_USER=n8n
