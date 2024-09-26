@@ -8,6 +8,10 @@ networks:
   stack:
     name: stack
     external: false
+  net_local:
+      driver: bridge
+  geral:
+    external: true
 
 services:
   database:
@@ -19,6 +23,8 @@ services:
     env_file: .env
     networks:
       - stack
+      - net_local
+      - geral
 
   calcom:
     image: calcom.docker.scarf.sh/calcom/cal.com
@@ -38,6 +44,9 @@ services:
     restart: always
     networks:
       - stack
+      - net_local
+      - geral
+
     ports:
       - 3000:3000
     env_file: .env
@@ -53,6 +62,8 @@ services:
     restart: always
     networks:
       - stack
+      - net_local
+      - geral
     ports:
       - 5555:5555
     env_file: .env

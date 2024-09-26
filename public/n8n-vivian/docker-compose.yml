@@ -20,6 +20,9 @@ services:
       - postgres
     volumes:
       - n8n_vivian:/home/node/.n8n
+    networks:
+      - net_local
+      - geral
   
   postgres_vivian:
     restart: always
@@ -31,9 +34,18 @@ services:
       - POSTGRES_PASSWORD=securepassword
     volumes:
       - postgres_vivian:/var/lib/postgresql/data  # Persist PostgreSQL data
+    networks:
+      - net_local
+      - geral
 
 volumes:
   postgres_vivian:
     external: true
   n8n_vivian:
     external: true
+
+networks:
+    net_local:
+        driver: bridge
+    geral:
+        external: true
