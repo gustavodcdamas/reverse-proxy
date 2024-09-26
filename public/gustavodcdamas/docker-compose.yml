@@ -22,7 +22,7 @@ services:
       - geral
       - back
   db:
-    image: mysql
+    image: mysql:8.0
     container_name: db
     restart: always
     environment:
