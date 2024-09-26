@@ -44,8 +44,11 @@ networks:
     driver: bridge
   geral:
     external: true
-  back:
   postgres_vivian:
     external: true
   n8n_vivian:
     external: true
+
+volumes:
+  postgres_vivian:
+  n8n_vivian:
