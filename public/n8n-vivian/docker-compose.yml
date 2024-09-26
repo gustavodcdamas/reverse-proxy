@@ -1,0 +1,36 @@
+version: "3.7"
+
+services:
+  n8n-vivian:
+    image: docker.n8n.io/n8nio/n8n
+    container_name: n8n-vivian
+    restart: always
+    ports:
+      - "5677:5677"
+    environment:
+      - N8N_HOST=${SUBDOMAIN}.${DOMAIN_NAME}
+      - N8N_PORT=5677
+      - N8N_PROTOCOL=https
+      - NODE_ENV=production
+      - WEBHOOK_URL=https://${SUBDOMAIN}.${DOMAIN_NAME}/
+      - GENERIC_TIMEZONE=${GENERIC_TIMEZONE}
+    depends_on:
+      - postgres
+    volumes:
+      - n8n_vivian:/home/node/.n8n
+  
+  postgres:
+    restart: always
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=n8n
+      - POSTGRES_USER=n8n
+      - POSTGRES_PASSWORD=securepassword
+    volumes:
+      - postgres_vivian:/var/lib/postgresql/data  # Persist PostgreSQL data
+
+volumes:
+  postgres_vivian:
+    external: true
+  n8n_vivian:
+    external: true
