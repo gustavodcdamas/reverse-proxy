@@ -17,7 +17,7 @@ services:
       - WEBHOOK_URL=https://${SUBDOMAIN}.${DOMAIN_NAME}/
       - GENERIC_TIMEZONE=${GENERIC_TIMEZONE}
     depends_on:
-      - postgres
+      - postgres_vivian
     volumes:
       - n8n_vivian:/home/node/.n8n
     networks:

@@ -23,6 +23,7 @@ services:
       - back
   db:
     image: mysql:latest
+    container_name: db
     restart: always
     environment:
       MYSQL_DATABASE: wpdb
@@ -46,12 +47,9 @@ services:
       - net_local
       - geral
       - back  
+
 networks:
   back:
-  net_local:
-    driver: bridge
-  geral:
-    external: true
 
 volumes:
   wordpress:
