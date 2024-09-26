@@ -43,8 +43,7 @@ volumes:
     external: true
   n8n_vivian:
     external: true
-  networks:
-    net_local:
-        driver: bridge
-    geral:
-        external: true
+  net_local:
+    driver: bridge
+  geral:
+    external: true

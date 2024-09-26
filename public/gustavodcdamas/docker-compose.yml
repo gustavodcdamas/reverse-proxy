@@ -49,12 +49,11 @@ services:
       - back  
 
 networks:
+  net_local:
+    driver: bridge
+  geral:
+    external: true
   back:
-  networks:
-    net_local:
-        driver: bridge
-    geral:
-        external: true
 
 
 volumes:
