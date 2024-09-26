@@ -38,12 +38,14 @@ services:
       - net_local
       - geral
 
-volumes:
-  postgres_vivian:
-    external: true
-  n8n_vivian:
-    external: true
+
+networks:
   net_local:
     driver: bridge
   geral:
+    external: true
+  back:
+  postgres_vivian:
+    external: true
+  n8n_vivian:
     external: true
