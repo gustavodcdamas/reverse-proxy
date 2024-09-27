@@ -60,6 +60,7 @@ services:
 # Optional use of Prisma Studio. In production, comment out or remove the section below to prevent unwanted access to your database.
   studio:
     image: calcom.docker.scarf.sh/calcom/cal.com
+    container_name: studio
     restart: always
     networks:
       - stack
