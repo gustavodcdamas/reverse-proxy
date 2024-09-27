@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+    evo:
+        image: 
+        container_name: evo
+        build:
+            context: ./
+        ports:
+            - 3000:80
+            - 3000:443
+        volumes:
+            - evo_data:/home/node/.n8n
+        networks:
+            - net_local
+            - geral
+
+networks:
+    net_local:
+        driver: bridge
+    geral:
+        external: true

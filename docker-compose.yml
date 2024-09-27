@@ -14,7 +14,6 @@ services:
             - ./nginx/conf.d:/etc/nginx/conf.d
             - ./nginx/letsencrypt:/etc/letsencrypt
             - ./public:/var/www/public
-            - ./public:/var/www/public/gustavodcdamas/
         networks:
             - net_local
             - geral
