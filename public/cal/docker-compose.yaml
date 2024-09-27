@@ -28,6 +28,7 @@ services:
 
   calcom:
     image: calcom.docker.scarf.sh/calcom/cal.com
+    container_name: calcom
     build:
       context: .
       dockerfile: Dockerfile
