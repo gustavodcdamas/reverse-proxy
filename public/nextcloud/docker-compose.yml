@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+  drive-db:
+    image: mariadb
+    restart: always
+    container_name: drive-db
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=Mesa12Chuveiro67!
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=agenciacuei
+      - MYSQL_PASSWORD=Mesa12Chuveiro67!
+    networks:
+      - net_swarm
+      - net_geral
+
+  drive:
+    image: nextcloud
+    restart: always
+    ports:
+      - 8081:80
+    container_name: drive
+    volumes:
+      - nextcloud:/var/www/html
+    environment:
+      - MYSQL_PASSWORD=Mesa12Chuveiro67!
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=agenciacuei
+      - MYSQL_HOST=db
+    depends_on:
+      - db
+    networks:
+      - net_swarm
+      - net_geral
+
+volumes:
+  nextcloud:
+  db:
+
+networks:
+  net_swarm:
+    name: net_swarm
+    external: true
+    attachable: true
+  net_geral:
+    name: net_geral
+    driver: bridge
+    external: true
+    attachable: true

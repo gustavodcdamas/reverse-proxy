@@ -1,0 +1,59 @@
+version: "3.7"
+
+services:
+  n8n-cuei:
+    image: docker.n8n.io/n8nio/n8n
+    build:
+      context: ./
+    container_name: n8n-cuei
+    restart: always
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_HOST=${SUBDOMAIN}.${DOMAIN_NAME}
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=https
+      - NODE_ENV=production
+      - WEBHOOK_URL=https://${SUBDOMAIN}.${DOMAIN_NAME}/
+      - GENERIC_TIMEZONE=${GENERIC_TIMEZONE}
+    depends_on:
+      - postgres_cuei
+    volumes:
+      - n8n_cuei:/home/node/.n8n
+    networks:
+      - net_swarm
+      - net_geral
+  
+  postgres_cuei:
+    restart: always
+    image: postgres:latest
+    container_name: postgres_cuei
+    environment:
+      - POSTGRES_DB=n8n_cuei
+      - POSTGRES_USER=n8n_cuei
+      - POSTGRES_PASSWORD=Mesa12Chuveiro67
+    volumes:
+      - postgres_cuei:/var/lib/postgresql/data  # Persist PostgreSQL data
+    networks:
+      - net_swarm
+      - net_geral
+
+
+networks:
+  net_swarm:
+    name: net_swarm
+    external: true
+    attachable: true
+  net_geral:
+    name: net_geral
+    driver: bridge
+    external: true
+    attachable: true
+  postgres_cuei:
+    external: true
+  n8n_cuei:
+    external: true
+
+volumes:
+  postgres_cuei:
+  n8n_cuei:

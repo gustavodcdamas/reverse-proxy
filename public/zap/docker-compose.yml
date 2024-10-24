@@ -1,20 +1,121 @@
-version: '3.8'
+version: "3.7"
+
+##############
+#
+# Para configurar o chatwoot, execute o comando abaixo no console do container:
+#
+# bundle exec rails db:chatwoot_prepare
+#
+# Variáveis de Ambiente:
+#
+# https://www.chatwoot.com/docs/self-hosted/configuration/environment-variables
+#
+#############
+
 services:
-    zap:
-        image: 
-        container_name: zap
-        build:
-            context: ./
-        ports:
-            - 3000:80
-            - 3000:443
-        volumes:
-        networks:
-            - net_local
-            - geral
+  chatwoot_app:
+    image: sendingtk/chatwoot:latest 
+    command: bundle exec rails s -p 3000 -b 0.0.0.0
+    entrypoint: docker/entrypoints/rails.sh
+    volumes:
+      - chatwoot_nestor_data:/app/storage ## Diretório dos arquivos de conversa
+      - chatwoot_nestor_public:/app ## Diretório de todos os arquivos do chatwoot
+    networks:
+      - network_public ## Nome da rede interna
+    environment:
+      - CHATWOOT_HUB_URL=https://astraonline.com.br#
+      - INSTALLATION_NAME=Chatwoot ## Nome da empresa
+      - NODE_ENV=production
+      - RAILS_ENV=production
+      - INSTALLATION_ENV=docker
+      - SECRET_KEY_BASE=123458bb7ef6402f6a8bcf5d3be54321 ## Key aleatória gerada aleatóriamente
+      - FRONTEND_URL=https://seudominio.com.br ## Url do Chatwoot
+      - DEFAULT_LOCALE=pt_BR
+      - FORCE_SSL=true
+      - ENABLE_ACCOUNT_SIGNUP=false ## false = Desativar novas inscrições no inicio | true = Ativar novas inscrições no inicio
+      - REDIS_URL=redis://redis:6379
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USERNAME=postgres
+      - POSTGRES_PASSWORD=Mfcd62!!Mfcd62!! ## Senha do postgres
+      - POSTGRES_DATABASE=chatwoot
+      - ACTIVE_STORAGE_SERVICE=local
+      - RAILS_LOG_TO_STDOUT=true
+      - USE_INBOX_AVATAR_FOR_BOT=true
+      # Performance
+      - SIDEKIQ_CONCURRENCY=10
+      - RACK_TIMEOUT_SERVICE_TIMEOUT=0
+      - RAILS_MAX_THREADS=5
+      - WEB_CONCURRENCY=2
+      - ENABLE_RACK_ATTACK=false
+      # Servidor de Email Gmail
+      - MAILER_SENDER_EMAIL=Chatwoot <seuemail@gmail.com>
+      - SMTP_DOMAIN=gmail.com
+      - SMTP_ADDRESS=smtp.gmail.com
+      - SMTP_PORT=587
+      - SMTP_USERNAME=seuemail@gmail.com
+      - SMTP_PASSWORD=suasenha
+      - SMTP_AUTHENTICATION=login
+      - SMTP_ENABLE_STARTTLS_AUTO=true
+      - SMTP_OPENSSL_VERIFY_MODE=peer
+      - MAILER_INBOUND_EMAIL_DOMAIN=seuemail@gmail.com
+    
+
+  chatwoot_sidekiq:
+    image: sendingtk/chatwoot:latest ## Versão do Chatwoot NESTOR
+    command: bundle exec sidekiq -C config/sidekiq.yml
+    volumes:
+      - chatwoot_data:/app/storage ## Diretório dos arquivos de conversa
+      - chatwoot_public:/app ## Diretório de todos os arquivos do chatwoot
+    networks:
+      - net_swarm
+      - net_geral
+    environment:
+      - CHATWOOT_HUB_URL=https://cuei.com.br
+      - INSTALLATION_NAME=Cuei Zap ## Nome da empresa
+      - NODE_ENV=production
+      - RAILS_ENV=production
+      - INSTALLATION_ENV=docker
+      - SECRET_KEY_BASE=123458bb7ef6402f6a8bcf5d3be54321 ## Key aleatória gerada aleatóriamente
+      - FRONTEND_URL=https://zap.cuei.com.br ## Url do Chatwoot
+      - DEFAULT_LOCALE=pt_BR
+      - FORCE_SSL=true
+      - ENABLE_ACCOUNT_SIGNUP=false ## false = Desativar novas inscrições no inicio | true = Ativar novas inscrições no inicio
+      - REDIS_URL=redis://redis:6379
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USERNAME=postgres
+      - POSTGRES_PASSWORD=Mfcd62!!Mfcd62!! ## Senha do postgres
+      - POSTGRES_DATABASE=chatwoot
+      - ACTIVE_STORAGE_SERVICE=local
+      - RAILS_LOG_TO_STDOUT=true
+      - USE_INBOX_AVATAR_FOR_BOT=true
+      # Performance
+      - SIDEKIQ_CONCURRENCY=10
+      - RACK_TIMEOUT_SERVICE_TIMEOUT=0
+      - RAILS_MAX_THREADS=5
+      - WEB_CONCURRENCY=2
+      - ENABLE_RACK_ATTACK=false
+      # Servidor de Email Gmail
+      - MAILER_SENDER_EMAIL=Chatwoot <seuemail@gmail.com>
+      - SMTP_DOMAIN=gmail.com
+      - SMTP_ADDRESS=smtp.gmail.com
+      - SMTP_PORT=587
+      - SMTP_USERNAME=seuemail@gmail.com
+      - SMTP_PASSWORD=suasenha
+      - SMTP_AUTHENTICATION=login
+      - SMTP_ENABLE_STARTTLS_AUTO=true
+      - SMTP_OPENSSL_VERIFY_MODE=peer
+      - MAILER_INBOUND_EMAIL_DOMAIN=seuemail@gmail.com
+
+
+volumes:
+  chatwoot_data:
+    external: true
+    name: chatwoot_data
+  chatwoot_public:
+    external: true
+    name: chatwoot_public
 
 networks:
-    net_local:
-        driver: bridge
-    geral:
-        external: true
+  network_public:
+    external: true
+    name: network_public

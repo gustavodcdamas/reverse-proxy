@@ -15,11 +15,16 @@ services:
             - ./nginx/letsencrypt:/etc/letsencrypt
             - ./public:/var/www/public
         networks:
-            - net_local
-            - geral
+            - net_swarm
+            - net_geral
 
 networks:
-    net_local:
-        driver: bridge
-    geral:
-        external: true
+  net_swarm:
+    name: net_swarm
+    external: true
+    attachable: true
+  net_geral:
+    name: net_geral
+    driver: bridge
+    external: true
+    attachable: true

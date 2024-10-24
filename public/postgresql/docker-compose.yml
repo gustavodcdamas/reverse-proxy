@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:16.4
+    container_name: postgres
+    command: [postgres, --max_connections=100]
+    networks:
+      - net_swarm
+      - net_geral
+    environment:
+      - POSTGRES_PASSWORD=Mesa12Chuveiro67
+      - TZ=America/Sao_Paulo
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    
+volumes:
+  postgres_data:
+    external: true
+
+networks:
+  net_swarm:
+    name: net_swarm
+    external: true
+    attachable: true
+  net_geral:
+    name: net_geral
+    driver: bridge
+    external: true
+    attachable: true

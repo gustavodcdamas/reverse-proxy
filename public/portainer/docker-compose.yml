@@ -1,0 +1,44 @@
+version: "3.7"
+
+services:
+
+  agent:
+    image: portainer/agent:2.20.1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/volumes:/var/lib/docker/volumes
+    networks:
+      - net_swarm
+      - net_geral
+    deploy:
+      mode: global
+      placement:
+        constraints: [node.platform.os == linux]
+
+  portainer:
+    image: portainer/portainer-ce:2.20.1
+    container_name: portainer
+    command: -H tcp://tasks.agent:9001 --tlsskipverify
+    ports:
+      - 9000:9000
+    volumes:
+      - portainer_data:/data
+    networks:
+      - net_swarm
+      - net_geral
+
+networks:
+  net_swarm:
+    name: net_swarm
+    external: true
+    attachable: true
+  net_geral:
+    name: net_geral
+    driver: bridge
+    external: true
+    attachable: true
+
+volumes:
+  portainer_data:
+    external: true
+    name: portainer_data

@@ -1,20 +1,36 @@
-version: '3.8'
+version: "3.7"
 services:
-    drive:
-        image: 
-        container_name: cal
-        build:
-            context: ./
-        ports:
-            - 3000:80
-            - 3000:443
-        volumes:
-        networks:
-            - net_local
-            - geral
+
+  nextcloud-aio:
+    image: nextcloud/all-in-one:latest
+    init: true
+    restart: unless-stopped
+    container_name: drive 
+    volumes:
+      - nextcloud_aio_mastercontainer:/mnt/docker-aio-config   
+      - /var/run/docker.sock:/var/run/docker.sock:ro 
+    ports:
+      - "8090:8080"
+      - "8443:8443" 
+    networks:
+      - net_swarm
+      - net_geral
+    environment: 
+      - APACHE_PORT=11000  # change this port number if 11000 is already in use on your host system.  
+      - APACHE_IP_BINDING=0.0.0.0 
+      
+volumes: 
+  nextcloud_aio_mastercontainer:
+    name: nextcloud_aio_mastercontainer  
+
 
 networks:
-    net_local:
-        driver: bridge
-    geral:
-        external: true
+  net_swarm:
+    name: net_swarm
+    external: true
+    attachable: true
+  net_geral:
+    name: net_geral
+    driver: bridge
+    external: true
+    attachable: true
